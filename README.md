@@ -1,4 +1,4 @@
-# Exercises Applying Bioinformatics
+# Exercises Applying Bioinformatics 🧬
 
 Source code developed for the final projects of the course BT1013.
 
