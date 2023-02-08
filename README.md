@@ -1,6 +1,6 @@
 # Exercises Applying Bioinformatics
 
-Source code developed for the final projects of the course TC1033.
+Source code developed for the final projects of the course BT1013.
 
 **Course:** BT1013 (Computational Biology Analysis) <br>
 **Developed by:** [Brenda Saucedo](https://github.com/Bren12) <br>
@@ -14,11 +14,11 @@ use of programming tools to establish data analysis.
 
 ## Files Description
 
-### 📁 Análisis Inicial
+### 📁 1. Análisis Inicial
 
 Folder containing files with an initial analysis on the context and situation of the SARS-CoV-2 
 virus and its variants.
 
-### 📁 Análisis e Interpretación
+### 📁 2. Análisis e Interpretación
 
 Folder containing files with an analysis and interpretation of the SARS-CoV-2 virus and its variants.
