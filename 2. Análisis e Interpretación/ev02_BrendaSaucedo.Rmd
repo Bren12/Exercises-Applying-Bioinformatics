@@ -1,0 +1,330 @@
+---
+title: "Evidencia 2 | Proyecto Integrador"
+author: "Brenda Elena Saucedo González - A00829855"
+date: "30/04/2021"
+output: html_document
+---
+
+# PARTE 1 - Reporte
+
+***1. ¿Cuáles son los virus “similares” a SARS-CoV-2 en el mundo? Obtén tus referencias de PUBMED***
+
+```
+- Los virus similares a SARS-CoV-2 son: el SARS-CoV, MERS-CoV y la influenza.
+
+Abdelrahman, Z., Li, M., & Wang, X. (2020). Comparative Review of SARS-CoV-2, SARS-CoV, 
+MERS-CoV, and Influenza A Respiratory Viruses. abril 30, 2021, de PubMed Sitio web:
+https://pubmed.ncbi.nlm.nih.gov/33013925/
+```
+
+***2. ¿Cuáles son los coronavirus reportados en otras especies que pueden ser cercanos al genoma de SARS-CoV-2? Incluye de qué especies son y menciona las referencias de los artículos consultados en PUBMED***
+
+```
+- En murciélagos está el RaTG13 y bat-CL-CoVZXC21.
+- En pangolines está el GX_P2V y GX_P4L.
+- En conejos está el HKU14.
+- En roedores está el RtMruf.
+- En gatos está el HLJ DQ.
+- En perros está el HLJ-071, NTU336F y CRCoV-BJ232.
+- En el hurón está el FRSCV.
+
+Zhang, T., Wu, Q., & Zhang, Z. (2020). Probable Pangolin Origin of SARS-CoV-2 
+Associated with the COVID-19 Outbreak. abril 30, 2021, de PubMed Sitio web:
+https://pubmed.ncbi.nlm.nih.gov/32197085/
+
+Fan, H., Wang, L., Liu, W., An, X., Liu, Z., He, X., Song, L., & Tong, Y. (2020). 
+Repurposing of clinically approved drugs for treatment of coronavirus disease 
+2019 in a 2019-novel coronavirus-related coronavirus model. abril 30, 2021, de 
+PubMed Sitio web: https://pubmed.ncbi.nlm.nih.gov/32149769/
+
+Murray, J., Kiupel, M., & Maes, R. (2010). Ferret coronavirus-associated diseases. 
+abril 30, 2021, de PubMed Sitio web: https://pubmed.ncbi.nlm.nih.gov/20682435/
+
+Sharun, K., Tiwari, R., Natesan, R., & Dhama, K. (2021). SARS-CoV-2 infection 
+in farmed minks, associated zoonotic concerns, and importance of the One Health 
+approach during the ongoing COVID-19 pandemic. abril 30, 2021, de PubMed Sitio 
+web: https://pubmed.ncbi.nlm.nih.gov/33349165/
+```
+
+
+***3. En relación con la situación actual reflexiona, ¿qué propondrías que se deba hacer durante la contingencia del SARS-CoV-2 en comunidades de bajos recursos?***
+
+```
+Personalmente propondría que se abrieran varios fondos económicos, de 
+despensas, escolares, ayuda médica y de medicamentos, y enseñar medidas de 
+higiene acorde a sus necesidades y posibilidades, tanto personales como para 
+el hogar, para que las personas que son de bajos recursos puedan salir adelante. 
+También propondría que les dieran más tiempo de tolerancia y subsidios para 
+pagar los recibos de agua, luz y gas, ya que no poseen una fuente de ingresos
+estable. También buscaría ofrecerles una fuente de ingresos por medio de 
+trabajos que puedan hacer en casa para el bien de su comunidad.
+```
+
+# PARTE 2 - Código
+
+### Cargar librerías
+
+```{r}
+library(ape)
+```
+
+```{r}
+library(Biostrings)
+```
+
+```{r}
+library(DECIPHER)
+```
+
+```{r}
+library(seqinr)
+```
+
+### 1. Analizar las secuencias de SARS-CoV-2 reportadas en los 20 países con más casos reportados
+
+```{r}
+virus_paises <- c("China", "EUA", "India", "Brazil", "Francia", "Rusia", "Inglaterra", "Argentina", "México", "Alemania", "Sudáfrica", "Polonia", "España", "Turquía", "Australia")
+
+virus <- c("NC_045512.2", "MZ021680.1", "MW927136.1", "MW592707.1", "LR881474.1", "MW741552.1", "MW980115.1", "MW633892.1", "MW595908.1", "MW822592.1","MW981442.1", "MZ047082.1", "MW976780.1", "MW308549.1", "MW772455.1")
+```
+
+```{r}
+virus_genbank <- read.GenBank(virus)
+```
+
+```{r}
+write.dna(virus_genbank, file = "virus_secuencias.fasta", format = "fasta", append = F, nbcol = 5, colsep = " ", colw = 15)
+```
+
+```{r}
+virus_seq <- readDNAStringSet("virus_secuencias.fasta", format = "fasta")
+```
+
+```{r}
+virus_seq
+```
+
+### 2. Calcular la longitud de las secuencias
+
+```{r}
+for (i in 1:length(virus_genbank)) {
+  print(paste(virus_paises[i], virus[i], "-> Tamaño de la secuencia:", length(virus_genbank[[i]])))
+}
+```
+
+### 3. Crear una sola gráfica donde se comparen el número de bases de ADN que componen todas las variantes del virus
+
+```{r}
+# China - NC_045512.2
+cn_seq_frec <- letterFrequency(x = virus_seq[[1]], letters = DNA_BASES, as.prob = T)
+cn_seq_frec
+```
+
+```{r}
+# EUA -  MZ021680.1
+eua_seq_frec <- letterFrequency(x = virus_seq[[2]], letters = DNA_BASES, as.prob = T)
+eua_seq_frec
+```
+
+```{r}
+# India - MW927136.1
+in_seq_frec <- letterFrequency(x = virus_seq[[3]], letters = DNA_BASES, as.prob = T)
+in_seq_frec
+```
+
+```{r}
+# Brazil - MW592707.1
+bra_seq_frec <- letterFrequency(x = virus_seq[[4]], letters = DNA_BASES, as.prob = T)
+bra_seq_frec
+```
+
+```{r}
+# Francia - LR881474.1
+fr_seq_frec <- letterFrequency(x = virus_seq[[5]], letters = DNA_BASES, as.prob = T)
+fr_seq_frec
+```
+
+```{r}
+# Rusia - MW741552.1
+ru_seq_frec <- letterFrequency(x = virus_seq[[6]], letters = DNA_BASES, as.prob = T)
+ru_seq_frec
+```
+
+```{r}
+# Inglaterra - MW980115.1
+uk_seq_frec <- letterFrequency(x = virus_seq[[7]], letters = DNA_BASES, as.prob = T)
+uk_seq_frec
+```
+
+```{r}
+# Argentina - MW633892.1
+ar_seq_frec <- letterFrequency(x = virus_seq[[8]], letters = DNA_BASES, as.prob = T)
+ar_seq_frec
+```
+
+```{r}
+# México - MW595908.1
+mex_seq_frec <- letterFrequency(x = virus_seq[[9]], letters = DNA_BASES, as.prob = T)
+mex_seq_frec
+```
+
+```{r}
+# Alemania - MW822592.1
+deu_seq_frec <- letterFrequency(x = virus_seq[[10]], letters = DNA_BASES, as.prob = T)
+deu_seq_frec
+```
+
+```{r}
+# Sudáfrica - MW981442.1
+za_seq_frec <- letterFrequency(x = virus_seq[[11]], letters = DNA_BASES, as.prob = T)
+za_seq_frec
+```
+
+```{r}
+# Polonia - MZ047082.1
+po_seq_frec <- letterFrequency(x = virus_seq[[12]], letters = DNA_BASES, as.prob = T)
+po_seq_frec
+```
+
+```{r}
+# España - MW976780.1
+esp_seq_frec <- letterFrequency(x = virus_seq[[13]], letters = DNA_BASES, as.prob = T)
+esp_seq_frec
+```
+
+```{r}
+# Turquía - MW308549.1
+tur_seq_frec <- letterFrequency(x = virus_seq[[14]], letters = DNA_BASES, as.prob = T)
+tur_seq_frec
+```
+
+```{r}
+# Australia - MW772455.1
+aus_seq_frec <- letterFrequency(x = virus_seq[[15]], letters = DNA_BASES, as.prob = T)
+aus_seq_frec
+```
+
+```{r}
+virus_matriz_adn <- rbind(cn_seq_frec, eua_seq_frec, in_seq_frec, bra_seq_frec, fr_seq_frec, ru_seq_frec, uk_seq_frec, ar_seq_frec, mex_seq_frec, deu_seq_frec, za_seq_frec, po_seq_frec, esp_seq_frec, tur_seq_frec, aus_seq_frec)
+
+rownames(virus_matriz_adn) <- virus_paises
+
+virus_matriz_adn
+```
+
+```{r}
+barplot(virus_matriz_adn, col=1:15, beside=T)
+
+legend("top", legend = virus_paises, fill = 1:15, ncol = 3, cex=0.7)
+```
+
+### Árbol filogenético
+
+```{r}
+virus_seq <- OrientNucleotides(virus_seq)
+```
+
+```{r}
+virus_seq_alineada <- AlignSeqs(virus_seq)
+```
+
+```{r}
+writeXStringSet(virus_seq_alineada, file = "virus_seq_alineadas.fasta")
+```
+
+```{r}
+virus_seq_alineada <- read.alignment("virus_seq_alineadas.fasta", format = "fasta")
+```
+
+```{r}
+matriz_dist <- dist.alignment(virus_seq_alineada, matrix = "similarity")
+```
+
+```{r}
+virus_arbol <- nj(matriz_dist)
+```
+
+```{r}
+plot(virus_arbol, cex = 0.8)
+title("Secuencias de SARS-CoV-2 en los países con más casos reportados")
+```
+
+# Analísis
+
+### Análisis jerárquico global
+
+```
+Cada secuencia viral analizada y estudiada en esta evidencia, proceden de un ancestro 
+en común, lo que las hace aproximadamente similares en comportamiento y secuencia, 
+pero diferentes en letalidad, riesgo, contagio, etc.
+
+Lo que las hace ramificarse de una forma en específico es su parecido con otras 
+secuencias, cuanto más parecido se encuentre con otras secuencias, el árbol las 
+junta dentro de una misma ramificación dando a entender que pertenecen a la 
+misma variante. Entre más diferente estas secuencias sean, las separa creando 
+otra ramificación, lo que significa que pertenecen a diferentes variantes.
+
+Un ejemplo de las secuencias similares es el MZ047082.1 de Polonia y el MW980115.1 
+de Inglaterra. A estas secuencias las junta en una misma ramificación ya que 
+ambas pertenecen a la variante B.1.1.7.
+
+Un ejemplo de la creación de otras ramificaciones debido a la gran diferencia de 
+secuencias es el MZ021680.1 de EUA con el MW981442.1 de Sudáfrica y el MW822592.1 
+de Alemania, ya que la variante de EUA es B.1.577, y el de Sudáfrica y Alemania 
+es B.1.351.
+```
+
+### Interpretación escrita de las gráficas y conclusiones
+
+```
+Las secuencias en cada país son similares, ya que todas estas son mutaciones 
+de la secuencia original, razón por la cual contienen aproximadamente la 
+misma cantidad de nucleótidos, la única que, si se diferencia un poco, es la 
+secuencia de Inglaterra, la cual contiene una menor cantidad de cada nucleótido
+que las demás variantes.
+
+Es normal que estas secuencias no contengan la misma cantidad de nucleótidos 
+por ser variantes, es decir, mutaciones de la secuencia original del virus.
+Estas mutaciones ocasionan que sus comportamientos y sus secuencias sean similares, 
+sin mencionar que estas mutaciones pueden provocar diferentes reacciones, como 
+menor o mayor letalidad, menor o mayor riesgo de contagio, menor o mayor 
+resistencia, etc.
+```
+
+### ¿Son muy diferentes las variantes entre cada país? ¿Es diferente el SARS-CoV-2 entre las diferentes poblaciones: Asiática, Hispana, Europea o Africana?
+
+```
+Las variantes en cada país son similares, ya que todas estas comparten como 
+ancestro común el SARS-CoV-2 y se comportan de manera similar.
+
+Las variantes ubicadas en una población concentrada tienen mayor similitud que
+otras variantes de otras poblaciones, debido a que las mutaciones que surgen 
+dentro de esta población contienen mayor similitud en sus secuencias.
+```
+
+# Referencias
+
+```
+Expertos del Centro de Recursos sobre el Coronavirus de Johns Hopkins. (2020). 
+COVID-19 Dashboard by the Center for Systems Science and Engineering (CSSE) at 
+Johns Hopkins University (JHU). abril 30, 2021, de Johns Hopkins University & 
+Medicine Sitio web: https://coronavirus.jhu.edu/map.html
+```
+
+### PAQUETES USADOS
+
+```{r}
+citation("ape")
+```
+
+```{r}
+citation("Biostrings")
+```
+
+```{r}
+citation("DECIPHER")
+```
+
+```{r}
+citation("seqinr")
+```
